@@ -29,6 +29,8 @@ def gate_ok(text: str) -> str:
         sys.exit("error: motto is empty")
     if "\n" in stripped or "\r" in stripped:
         sys.exit("error: motto must be a single line")
+    if any(ord(ch) < 0x20 and ch != "\t" for ch in stripped):
+        sys.exit("error: motto contains a control character")
     if len(stripped) > MAX_CHARS:
         sys.exit(
             "error: motto is %d characters, over the %d limit"
@@ -41,6 +43,10 @@ def main() -> int:
     motto = gate_ok(MOTTO)
     TARGET.parent.mkdir(parents=True, exist_ok=True)
     TARGET.write_text(motto, encoding="utf-8", newline="")
+    # Read the file back and confirm it holds exactly the motto bytes.
+    written = TARGET.read_bytes()
+    if written != motto.encode("utf-8"):
+        sys.exit("error: verification failed, /output/entry.txt mismatch")
     print("wrote %d characters to %s" % (len(motto), TARGET))
     return 0
 

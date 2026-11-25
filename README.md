@@ -17,7 +17,13 @@ python3 main.py
 ```
 
 The script prints how many characters it wrote. It needs nothing beyond
-Python 3 and the standard library.
+Python 3 and the standard library. After writing, it reads the file back
+and exits non-zero if the bytes differ from the motto, so a silent
+truncation can never pass as a valid entry.
+
+Verified output: `/output/entry.txt` holds exactly the 56-character motto
+with no trailing newline (SHA-256
+`501873b73e3e52385e663916c5df8baad4211075b6c33f0f85589edb3b289b66`).
 
 ---
 
